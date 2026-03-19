@@ -1,0 +1,1215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>RPBS Lab — Remote Programmable Biosystems Laboratory</title>
+  <meta name="description" content="The Remote Programmable Biosystems Lab (RPBS) at Indiana University Bloomington develops ultrasound-based technologies to remotely control biological systems for cancer immunotherapy.">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --ink: #0e0e0e;
+      --paper: #f5f0e8;
+      --cream: #ede8da;
+      --accent: #c84b2f;
+      --accent-light: #e07055;
+      --muted: #7a7468;
+      --border: #d8d1c0;
+      --white: #fdfaf4;
+      --section-gap: 120px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; font-size: 17px; }
+
+    body {
+      background: var(--paper);
+      color: var(--ink);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      line-height: 1.65;
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 20px 60px;
+      background: rgba(245,240,232,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo {
+      display: flex; align-items: center; gap: 12px;
+      text-decoration: none;
+    }
+
+    .nav-logo img {
+      height: 40px; width: auto;
+    }
+
+    .nav-logo-text {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.35rem;
+      letter-spacing: -0.02em;
+      color: var(--accent);
+    }
+
+    .nav-logo-text span { color: var(--ink); margin-left: 0.25em; }
+
+    nav ul {
+      display: flex; gap: 36px; list-style: none;
+    }
+
+    nav ul a {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.75rem;
+      font-weight: 400;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    nav ul a:hover { color: var(--accent); }
+
+    /* ── HERO ── */
+    #home {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      padding: 60px 60px 60px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-bg {
+      position: absolute; inset: 0; z-index: 0;
+      background:
+        radial-gradient(ellipse 60% 70% at 80% 50%, rgba(200,75,47,0.07) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 50% at 20% 80%, rgba(200,75,47,0.04) 0%, transparent 60%);
+    }
+
+    .hero-grid {
+      position: absolute; inset: 0; z-index: 0;
+      background-image:
+        linear-gradient(var(--border) 1px, transparent 1px),
+        linear-gradient(90deg, var(--border) 1px, transparent 1px);
+      background-size: 60px 60px;
+      opacity: 0.4;
+      mask-image: radial-gradient(ellipse 80% 80% at 70% 50%, black 0%, transparent 70%);
+    }
+
+    .hero-content { position: relative; z-index: 1; }
+
+    .hero-eyebrow {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 20px;
+      display: flex; align-items: center; gap: 12px;
+    }
+
+    .hero-eyebrow::before {
+      content: '';
+      display: block; width: 32px; height: 1px;
+      background: var(--accent);
+    }
+
+    h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(3rem, 5.5vw, 5.2rem);
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+      margin-bottom: 28px;
+    }
+
+    h1 em {
+      font-style: italic;
+      color: var(--accent);
+    }
+
+    .hero-desc {
+      font-size: 1.05rem;
+      color: var(--muted);
+      max-width: 440px;
+      margin-bottom: 44px;
+      line-height: 1.8;
+    }
+
+    .btn-group { display: flex; gap: 16px; flex-wrap: wrap; }
+
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--ink);
+      color: var(--white);
+      padding: 14px 28px;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: background 0.2s, transform 0.2s;
+    }
+
+    .btn-primary:hover { background: var(--accent); transform: translateY(-1px); }
+
+    .btn-secondary {
+      display: inline-flex; align-items: center; gap: 8px;
+      border: 1px solid var(--border);
+      color: var(--ink);
+      padding: 14px 28px;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: border-color 0.2s, color 0.2s;
+    }
+
+    .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+
+    .hero-stats {
+      position: relative; z-index: 1;
+      display: flex; flex-direction: column; gap: 32px;
+      padding-left: 80px;
+      border-left: 1px solid var(--border);
+    }
+
+    .stat-item { display: flex; flex-direction: column; gap: 4px; }
+
+    .stat-number {
+      font-family: 'DM Serif Display', serif;
+      font-size: 3.4rem;
+      line-height: 1;
+      letter-spacing: -0.04em;
+      color: var(--ink);
+    }
+
+    .stat-number span { color: var(--accent); }
+
+    .stat-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    /* ── SECTION BASE ── */
+    section {
+      padding: var(--section-gap) 60px;
+    }
+
+    .section-header {
+      display: flex; align-items: baseline; gap: 20px;
+      margin-bottom: 64px;
+    }
+
+    .section-num {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--accent);
+      letter-spacing: 0.1em;
+    }
+
+    h2 {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(2rem, 3.5vw, 2.9rem);
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+    }
+
+    /* ── ABOUT ── */
+    #about { background: var(--white); }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: start;
+    }
+
+    .about-text p {
+      font-size: 1rem;
+      color: var(--muted);
+      margin-bottom: 20px;
+      line-height: 1.85;
+    }
+
+    .about-text p:first-child {
+      font-size: 1.15rem;
+      color: var(--ink);
+      font-weight: 400;
+    }
+
+    .pillars {
+      display: flex; flex-direction: column; gap: 0;
+      border: 1px solid var(--border);
+    }
+
+    .pillar {
+      padding: 28px 32px;
+      border-bottom: 1px solid var(--border);
+      display: flex; gap: 20px; align-items: flex-start;
+      transition: background 0.2s;
+    }
+
+    .pillar:last-child { border-bottom: none; }
+    .pillar:hover { background: var(--cream); }
+
+    .pillar-icon {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      color: var(--accent);
+      letter-spacing: 0.1em;
+      padding-top: 4px;
+      flex-shrink: 0;
+    }
+
+    .pillar h3 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.05rem;
+      margin-bottom: 6px;
+    }
+
+    .pillar p {
+      font-size: 0.93rem;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    /* ── RESEARCH ── */
+    #research { background: var(--paper); }
+
+    .research-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2px;
+    }
+
+    .research-card {
+      background: var(--white);
+      padding: 40px 36px;
+      border: 1px solid var(--border);
+      transition: transform 0.25s, box-shadow 0.25s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .research-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0;
+      height: 3px;
+      background: var(--accent);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.3s;
+    }
+
+    .research-card:hover::before { transform: scaleX(1); }
+    .research-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,0.08); }
+
+    .card-tag {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 16px;
+    }
+
+    .research-card h3 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.25rem;
+      margin-bottom: 14px;
+      letter-spacing: -0.02em;
+    }
+
+    .research-card p {
+      font-size: 0.93rem;
+      color: var(--muted);
+      line-height: 1.75;
+    }
+
+    /* ── PI ── */
+    #pi { background: var(--white); }
+
+    .pi-layout {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 60px;
+      align-items: start;
+    }
+
+    .pi-photo {
+      width: 280px; height: 340px;
+      background: var(--cream);
+      border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      position: relative; overflow: hidden;
+    }
+
+    .pi-photo-initials {
+      font-family: 'DM Serif Display', serif;
+      font-size: 4rem; color: rgba(200,75,47,0.1);
+      position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+    }
+
+    .pi-photo-text {
+      font-family: 'DM Mono', monospace; font-size: 0.7rem;
+      color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase;
+    }
+
+    .pi-name {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.65rem; margin-bottom: 4px;
+    }
+
+    .pi-title {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.7rem; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--accent);
+      margin-bottom: 4px;
+    }
+
+    .pi-affil {
+      font-size: 0.93rem; color: var(--muted); margin-bottom: 20px; line-height: 1.6;
+    }
+
+    .pi-bio p {
+      font-size: 1rem; color: var(--muted); line-height: 1.85; margin-bottom: 16px;
+    }
+
+    .pi-links { display: flex; gap: 12px; margin-top: 20px; flex-wrap: wrap; }
+
+    .pi-link {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--muted); text-decoration: none;
+      border: 1px solid var(--border); padding: 8px 16px;
+      transition: color 0.2s, border-color 0.2s;
+    }
+
+    .pi-link:hover { color: var(--accent); border-color: var(--accent); }
+
+    .pi-education { margin-top: 28px; border-top: 1px solid var(--border); padding-top: 20px; }
+
+    .pi-education h4 {
+      font-family: 'DM Mono', monospace; font-size: 0.68rem;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 12px;
+    }
+
+    .edu-item {
+      display: flex; gap: 16px; margin-bottom: 6px; font-size: 0.88rem;
+    }
+
+    .edu-year {
+      font-family: 'DM Mono', monospace; font-size: 0.75rem;
+      color: var(--muted); min-width: 42px;
+    }
+
+    .edu-detail { color: var(--muted); }
+    .edu-detail strong { color: var(--ink); font-weight: 500; }
+
+    /* ── NEWS ── */
+    #news { background: var(--white); }
+
+    .news-list {
+      display: flex; flex-direction: column;
+      gap: 0; border: 1px solid var(--border);
+    }
+
+    .news-item {
+      display: grid;
+      grid-template-columns: 160px 1fr;
+      gap: 32px;
+      padding: 28px 32px;
+      border-bottom: 1px solid var(--border);
+      align-items: baseline;
+      transition: background 0.2s;
+    }
+
+    .news-item:last-child { border-bottom: none; }
+    .news-item:hover { background: var(--cream); }
+
+    .news-date {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.68rem;
+      letter-spacing: 0.1em;
+      color: var(--accent);
+      text-transform: uppercase;
+      flex-shrink: 0;
+    }
+
+    .news-body { }
+
+    .news-tag {
+      display: inline-block;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      border: 1px solid var(--border);
+      padding: 2px 8px;
+      border-radius: 2px;
+      margin-bottom: 6px;
+    }
+
+    .news-title {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: var(--ink);
+      margin-bottom: 4px;
+      line-height: 1.45;
+    }
+
+    .news-desc {
+      font-size: 0.85rem;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    .news-link {
+      display: inline-block;
+      margin-top: 6px;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    .news-link:hover { text-decoration: underline; }
+
+    /* ── TEAM ── */
+    #team { background: var(--ink); color: var(--white); }
+
+    #team h2, #team .section-num { color: var(--white); }
+    #team .section-num { color: var(--accent-light); }
+
+    .team-message {
+      max-width: 700px; margin-bottom: 48px;
+    }
+
+    .team-message p {
+      font-size: 1.05rem; color: #aaa; line-height: 1.8; margin-bottom: 12px;
+    }
+
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 32px;
+    }
+
+    .team-card {
+      background: #1a1a1a; border: 1px solid #2a2a2a;
+      padding: 32px 28px; text-align: center;
+      transition: border-color 0.2s;
+    }
+
+    .team-card:hover { border-color: var(--accent); }
+
+    .team-card h3 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.05rem; margin-bottom: 6px;
+    }
+
+    .team-role {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.68rem; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--accent-light);
+      margin-bottom: 10px;
+    }
+
+    .team-card p { font-size: 0.85rem; color: #888; line-height: 1.65; }
+
+    .team-card-link {
+      text-decoration: none; color: inherit;
+      display: block; height: 100%;
+    }
+
+    .team-card-cta {
+      display: inline-block; margin-top: 14px;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.7rem; letter-spacing: 0.05em;
+      color: var(--accent); opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    .team-card:hover .team-card-cta { opacity: 1; }
+
+    /* ── PUBLICATIONS ── */
+    #publications { background: var(--cream); }
+
+    .pub-list { display: flex; flex-direction: column; gap: 0; }
+
+    .pub-item {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 32px;
+      align-items: start;
+      padding: 32px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .pub-year {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+      padding-top: 3px;
+      width: 48px;
+    }
+
+    .pub-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.05rem;
+      margin-bottom: 6px;
+      letter-spacing: -0.01em;
+      line-height: 1.3;
+    }
+
+    .pub-authors {
+      font-size: 0.86rem;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    .pub-authors strong { color: var(--ink); font-weight: 500; }
+
+    .pub-venue {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--accent);
+      letter-spacing: 0.06em;
+    }
+
+    .pub-link {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.68rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-decoration: none;
+      border: 1px solid var(--border);
+      padding: 6px 14px;
+      white-space: nowrap;
+      transition: color 0.2s, border-color 0.2s;
+    }
+
+    .pub-link:hover { color: var(--accent); border-color: var(--accent); }
+
+    /* ── CONTACT ── */
+    #contact {
+      background: var(--paper);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 100px;
+      align-items: start;
+    }
+
+    .contact-info h2 {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(2rem, 3.5vw, 2.9rem);
+      margin-bottom: 20px;
+    }
+
+    .contact-info p {
+      color: var(--muted);
+      margin-bottom: 40px;
+      line-height: 1.8;
+    }
+
+    .contact-details { display: flex; flex-direction: column; gap: 16px; }
+
+    .contact-row {
+      display: flex; gap: 16px; align-items: flex-start;
+    }
+
+    .contact-row-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.68rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      width: 80px;
+      flex-shrink: 0;
+      padding-top: 2px;
+    }
+
+    .contact-row-value {
+      font-size: 0.95rem;
+      color: var(--muted);
+    }
+
+    .contact-form { display: flex; flex-direction: column; gap: 20px; }
+
+    .form-group { display: flex; flex-direction: column; gap: 8px; }
+
+    .form-group label {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.68rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      background: var(--white);
+      border: 1px solid var(--border);
+      padding: 12px 16px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      color: var(--ink);
+      outline: none;
+      transition: border-color 0.2s;
+      resize: vertical;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      border-color: var(--accent);
+    }
+
+    .form-group textarea { min-height: 120px; }
+
+    .form-submit {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--accent);
+      color: var(--white);
+      padding: 14px 32px;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      border: none;
+      cursor: pointer;
+      transition: background 0.2s;
+      align-self: flex-start;
+    }
+
+    .form-submit:hover { background: var(--ink); }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--ink);
+      color: #555;
+      padding: 40px 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .footer-logo {
+      display: flex; align-items: center; gap: 10px;
+    }
+
+    .footer-logo img { height: 30px; width: auto; filter: brightness(0) invert(1); opacity: 0.7; }
+
+    .footer-logo-text {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.1rem;
+      color: var(--accent);
+    }
+
+    .footer-logo-text span { color: var(--white); margin-left: 0.25em; }
+
+    footer p {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.68rem;
+      letter-spacing: 0.1em;
+    }
+
+    .footer-links {
+      display: flex; gap: 24px;
+    }
+
+    .footer-links a {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.68rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #555;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover { color: var(--accent); }
+
+    /* ── DIVIDER ── */
+    .divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 0 60px;
+    }
+
+    /* ── ANIMATIONS ── */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 1024px) {
+      nav { padding: 16px 32px; }
+      section, #contact { padding: var(--section-gap) 32px; }
+      #home { padding: 100px 32px 60px; grid-template-columns: 1fr; }
+      .hero-stats { padding-left: 0; border-left: none; border-top: 1px solid var(--border); padding-top: 40px; flex-direction: row; flex-wrap: wrap; gap: 40px; }
+      .about-grid, #contact { grid-template-columns: 1fr; gap: 48px; }
+      .research-grid, .team-grid { grid-template-columns: repeat(2, 1fr); }
+      .pi-layout { grid-template-columns: 1fr; }
+      .pi-photo { width: 200px; height: 240px; }
+      footer { flex-direction: column; gap: 20px; text-align: center; }
+      .footer-links { flex-wrap: wrap; justify-content: center; }
+      .divider { margin: 0 32px; }
+    }
+
+    @media (max-width: 640px) {
+      nav ul { display: none; }
+      .research-grid, .team-grid { grid-template-columns: 1fr; }
+      .pub-item { grid-template-columns: 1fr; gap: 8px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="#home" class="nav-logo">
+      <span class="nav-logo-text">RPBS<span>Lab</span></span>
+    </a>
+    <ul>
+      <li><a href="#about">About</a></li>
+      <li><a href="#research">Research</a></li>
+      <li><a href="#pi">PI</a></li>
+      <li><a href="#news">News</a></li>
+      <li><a href="#publications">Publications</a></li>
+      <li><a href="#team">Team</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section id="home">
+    <div class="hero-bg"></div>
+    <div class="hero-grid"></div>
+    <div class="hero-content fade-in">
+      <div class="hero-eyebrow">Intelligent Systems Engineering · Indiana University Bloomington</div>
+      <h1>Programming<br><em>biology</em><br>with sound</h1>
+      <p class="hero-desc">
+        The RPBS Lab develops ultrasound-based technologies to remotely control biological systems — engineering programmable cellular therapies for next-generation cancer immunotherapy.
+      </p>
+      <div class="btn-group">
+        <a href="#research" class="btn-primary">Our Research →</a>
+        <a href="#contact" class="btn-secondary">Join the Lab</a>
+      </div>
+    </div>
+    <div class="hero-stats fade-in" style="transition-delay:0.2s">
+      <div class="stat-item">
+        <span class="stat-number">15<span>+</span></span>
+        <span class="stat-label">Publications</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number">4</span>
+        <span class="stat-label">Research Thrusts</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number">NIH</span>
+        <span class="stat-label">Funded Research</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number">2026</span>
+        <span class="stat-label">Lab Founded</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="section-header fade-in">
+      <span class="section-num">01</span>
+      <h2>About & Mission</h2>
+    </div>
+    <div class="about-grid">
+      <div class="about-text fade-in">
+        <p>
+          The Remote Programmable Biosystems (RPBS) Lab at Indiana University Bloomington develops cutting-edge technologies that harness the power of focused ultrasound to remotely control biological systems with spatial and temporal precision.
+        </p>
+        <p>
+          Our interdisciplinary approach bridges biomedical engineering, synthetic biology, and immunology to create programmable cellular therapies. By engineering ultrasound-responsive genetic circuits, we enable non-invasive, real-time control of therapeutic cells — opening new frontiers in cancer immunotherapy and beyond.
+        </p>
+        <p>
+          Housed within the Department of Intelligent Systems Engineering at the Luddy School of Informatics, Computing, and Engineering, the RPBS Lab is committed to translating fundamental discoveries into technologies that improve patient outcomes.
+        </p>
+      </div>
+      <div class="pillars fade-in">
+        <div class="pillar">
+          <span class="pillar-icon">01</span>
+          <div>
+            <h3>Ultrasound-Controlled Biology</h3>
+            <p>Non-invasive, spatially precise control of cellular behavior using focused ultrasound and engineered genetic circuits.</p>
+          </div>
+        </div>
+        <div class="pillar">
+          <span class="pillar-icon">02</span>
+          <div>
+            <h3>Translational Impact</h3>
+            <p>Every project is designed with a path from bench to bedside — we engineer for clinical relevance.</p>
+          </div>
+        </div>
+        <div class="pillar">
+          <span class="pillar-icon">03</span>
+          <div>
+            <h3>Interdisciplinary Rigor</h3>
+            <p>We integrate acoustics, molecular biology, immunology, and engineering into unified solutions.</p>
+          </div>
+        </div>
+        <div class="pillar">
+          <span class="pillar-icon">04</span>
+          <div>
+            <h3>Collaborative Culture</h3>
+            <p>The best science happens at disciplinary borders — we partner widely and train broadly.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider"/>
+
+  <!-- RESEARCH -->
+  <section id="research">
+    <div class="section-header fade-in">
+      <span class="section-num">02</span>
+      <h2>Research Areas</h2>
+    </div>
+    <div class="research-grid">
+      <div class="research-card fade-in">
+        <div class="card-tag">Area · 01</div>
+        <h3>Sonogenetics & Ultrasound-Controlled Immunotherapy</h3>
+        <p>We engineer ultrasound-responsive genetic circuits to remotely activate immune cells with spatial precision. Our sonogenetic platforms enable non-invasive control of CAR T cell therapy for solid tumors, including tumor priming strategies that confine antigen expression to target sites.</p>
+      </div>
+      <div class="research-card fade-in" style="transition-delay:0.1s">
+        <div class="card-tag">Area · 02</div>
+        <h3>Mechanotransduction & Calcium Signaling</h3>
+        <p>We investigate the fundamental mechanisms by which ultrasound modulates intracellular calcium signaling through mechanosensitive channels. Our work reveals how mechanical stimuli propagate through cell populations, providing the biophysical foundation for our therapeutic approaches.</p>
+      </div>
+      <div class="research-card fade-in" style="transition-delay:0.05s">
+        <div class="card-tag">Area · 03</div>
+        <h3>Synthetic Biology for Cell-Based Therapies</h3>
+        <p>We design and build synthetic gene circuits that rewire cellular responses to external stimuli. Our engineered circuits integrate ultrasound-sensing, signal processing, and therapeutic output modules to create next-generation smart cell therapies with programmable behaviors.</p>
+      </div>
+      <div class="research-card fade-in" style="transition-delay:0.15s">
+        <div class="card-tag">Area · 04</div>
+        <h3>Acoustic Tools & Biophysical Imaging</h3>
+        <p>We develop acoustic tweezer platforms and advanced imaging tools for probing cellular mechanobiology. These technologies enable real-time visualization and manipulation of cellular responses, supporting both fundamental research and the development of image-guided therapies.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- PI -->
+  <section id="pi">
+    <div class="section-header fade-in">
+      <span class="section-num">03</span>
+      <h2>Principal Investigator</h2>
+    </div>
+    <div class="pi-layout fade-in">
+      <div class="pi-photo">
+        <span class="pi-photo-initials">CWY</span>
+        <span class="pi-photo-text">Photo Coming Soon</span>
+      </div>
+      <div>
+        <h3 class="pi-name">Chi Woo (Nate) Yoon, Ph.D.</h3>
+        <div class="pi-title">Assistant Professor</div>
+        <p class="pi-affil">Department of Intelligent Systems Engineering<br>Luddy School of Informatics, Computing, and Engineering<br>Indiana University Bloomington</p>
+        <div class="pi-bio">
+          <p>Dr. Yoon is a biomedical engineer specializing in the development of ultrasound-based technologies for controlling biological systems. His research integrates expertise in ultrasound electronics, synthetic biology, and immunology to create remotely programmable cell therapies for cancer treatment.</p>
+          <p>Prior to joining IU Bloomington, Dr. Yoon served as an Assistant Research Scientist at the University of Southern California and completed postdoctoral training at UC San Diego. His work on tumor priming by ultrasound mechanogenetics for CAR T therapy was published in <em>Nature Materials</em> (2026), and he has contributed to high-impact studies in <em>Cell</em>, <em>Nature Communications</em>, and other leading journals.</p>
+        </div>
+        <div class="pi-links">
+          <a href="https://orcid.org/0000-0003-4619-7083" class="pi-link" target="_blank" rel="noopener">ORCID ↗</a>
+          <a href="https://scholar.google.com/" class="pi-link" target="_blank" rel="noopener">Google Scholar ↗</a>
+          <a href="mailto:cyoon@iu.edu" class="pi-link">Email ↗</a>
+        </div>
+        <div class="pi-education">
+          <h4>Education</h4>
+          <div class="edu-item">
+            <span class="edu-year">2018</span>
+            <span class="edu-detail"><strong>Ph.D.</strong> Biomedical Engineering, USC</span>
+          </div>
+          <div class="edu-item">
+            <span class="edu-year">2014</span>
+            <span class="edu-detail"><strong>M.S.</strong> Biomedical Engineering, USC</span>
+          </div>
+          <div class="edu-item">
+            <span class="edu-year">2010</span>
+            <span class="edu-detail"><strong>B.S.</strong> Biochemistry, UCLA</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider"/>
+
+  <!-- NEWS -->
+  <section id="news">
+    <div class="section-header fade-in">
+      <span class="section-num">04</span>
+      <h2>News</h2>
+    </div>
+    <div class="news-list">
+
+      <div class="news-item fade-in">
+        <span class="news-date">Aug 2026</span>
+        <div class="news-body">
+          <span class="news-tag">Lab Launch</span>
+          <p class="news-title">RPBS Lab will open at Indiana University Bloomington</p>
+          <p class="news-desc">Dr. Chi Woo (Nate) Yoon will join the Department of Intelligent Systems Engineering at the Luddy School. The RPBS Lab will begin its research program in ultrasound-controlled biology and programmable cell therapies.</p>
+        </div>
+      </div>
+
+      <div class="news-item fade-in">
+        <span class="news-date">Mar 2026</span>
+        <div class="news-body">
+          <span class="news-tag">Recruiting</span>
+          <p class="news-title">RPBS Lab is now recruiting for all positions</p>
+          <p class="news-desc">We are actively seeking a lab technician, postdoctoral researchers, PhD students, and undergraduate researchers to join our founding team.</p>
+          <a class="news-link" href="#team">View open positions →</a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <hr class="divider"/>
+
+  <!-- PUBLICATIONS -->
+  <section id="publications">
+    <div class="section-header fade-in">
+      <span class="section-num">05</span>
+      <h2>Selected Publications</h2>
+    </div>
+    <div class="pub-list">
+      <div class="pub-item fade-in">
+        <span class="pub-year">2026</span>
+        <div class="pub-content">
+          <div class="pub-title">Tumour priming by ultrasound mechanogenetics for CAR T therapy</div>
+          <div class="pub-authors"><strong>Yoon CW</strong>, Song C, Nguyen DNM, Yu X, Zhu L, Ho P, Huang Z, Lu G, Wang Y, et al.</div>
+          <div class="pub-venue">Nature Materials, 25(2):310–321</div>
+        </div>
+        <a href="#" class="pub-link">Paper ↗</a>
+      </div>
+      <div class="pub-item fade-in">
+        <span class="pub-year">2025</span>
+        <div class="pub-content">
+          <div class="pub-title">Engineering sonogenetic EchoBack-CAR T cells</div>
+          <div class="pub-authors">Liu L, He P, Wang Y, Ma F, Li D, Bai Z, Qu Y, Zhu L, <strong>Yoon CW</strong>, et al.</div>
+          <div class="pub-venue">Cell, 188(10):2621–2636</div>
+        </div>
+        <a href="#" class="pub-link">Paper ↗</a>
+      </div>
+      <div class="pub-item fade-in">
+        <span class="pub-year">2024</span>
+        <div class="pub-content">
+          <div class="pub-title">Ultrasound control of genomic regulatory toolboxes for cancer immunotherapy</div>
+          <div class="pub-authors">Wu Y, Huang Z, Liu Y, He P, Wang Y, ..., <strong>Yoon CW</strong>, ..., Liu L, Wang Y</div>
+          <div class="pub-venue">Nature Communications, 15(1):10444</div>
+        </div>
+        <a href="#" class="pub-link">Paper ↗</a>
+      </div>
+      <div class="pub-item fade-in">
+        <span class="pub-year">2023</span>
+        <div class="pub-content">
+          <div class="pub-title">Cellular and molecular imaging of CAR-T cell-based immunotherapy</div>
+          <div class="pub-authors">Liu L, <strong>Yoon CW</strong>, Yuan Z, Guo T, Qu Y, He P, Yu X, Zhu Z, Limsakul P, Wang Y</div>
+          <div class="pub-venue">Advanced Drug Delivery Reviews, 203:115135</div>
+        </div>
+        <a href="#" class="pub-link">Paper ↗</a>
+      </div>
+      <div class="pub-item fade-in">
+        <span class="pub-year">2022</span>
+        <div class="pub-content">
+          <div class="pub-title">The application of mechanobiotechnology for immuno-engineering and cancer immunotherapy</div>
+          <div class="pub-authors"><strong>Yoon CW</strong>, Pan Y, Wang Y</div>
+          <div class="pub-venue">Frontiers in Cell and Developmental Biology, 10:1064484</div>
+        </div>
+        <a href="#" class="pub-link">Paper ↗</a>
+      </div>
+      <div class="pub-item fade-in">
+        <span class="pub-year">2022</span>
+        <div class="pub-content">
+          <div class="pub-title">Mechanosensor Piezo1 mediates bimodal patterns of intracellular calcium and FAK signaling</div>
+          <div class="pub-authors">Pan Y, Shi LZ, <strong>Yoon CW</strong>, Preece D, ..., Liu L, Wang Y</div>
+          <div class="pub-venue">The EMBO Journal, 41(17):e111799</div>
+        </div>
+        <a href="#" class="pub-link">Paper ↗</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- TEAM -->
+  <section id="team">
+    <div class="section-header fade-in">
+      <span class="section-num">06</span>
+      <h2>Our People</h2>
+    </div>
+    <div class="team-message fade-in">
+      <p>The RPBS Lab is building its founding team at Indiana University Bloomington. We are actively recruiting motivated researchers at all levels.</p>
+    </div>
+    <div class="team-grid">
+      <div class="team-card fade-in">
+        <a href="position-technician.html" class="team-card-link">
+          <h3>Lab Technician</h3>
+          <div class="team-role">Now Recruiting</div>
+          <p>Hands-on support for daily lab operations, equipment maintenance, and experimental protocols.</p>
+          <span class="team-card-cta">View Position →</span>
+        </a>
+      </div>
+      <div class="team-card fade-in" style="transition-delay:0.1s">
+        <a href="position-postdoc.html" class="team-card-link">
+          <h3>Postdoctoral Researchers</h3>
+          <div class="team-role">Now Recruiting</div>
+          <p>Synthetic biology, ultrasound engineering, or immunology backgrounds welcome.</p>
+          <span class="team-card-cta">View Position →</span>
+        </a>
+      </div>
+      <div class="team-card fade-in" style="transition-delay:0.15s">
+        <a href="position-phd.html" class="team-card-link">
+          <h3>Ph.D. Students</h3>
+          <div class="team-role">Now Recruiting</div>
+          <p>Apply through the ISE department or related programs at IU Bloomington.</p>
+          <span class="team-card-cta">View Position →</span>
+        </a>
+      </div>
+      <div class="team-card fade-in" style="transition-delay:0.2s">
+        <a href="position-undergrad.html" class="team-card-link">
+          <h3>Undergraduate Researchers</h3>
+          <div class="team-role">Open Positions</div>
+          <p>IU students interested in biomedical engineering research are welcome to inquire.</p>
+          <span class="team-card-cta">View Position →</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="contact-info fade-in">
+      <div class="section-header" style="margin-bottom:32px">
+        <span class="section-num">07</span>
+        <h2>Contact<br>& Join Us</h2>
+      </div>
+      <p>
+        We are actively recruiting PhD students, postdoctoral researchers, and undergraduates. If our work resonates with you, please reach out — we especially welcome applicants with backgrounds in ultrasound technology, synthetic biology, cell engineering, cancer immunology, or bioimaging.
+      </p>
+      <div class="contact-details">
+        <div class="contact-row">
+          <span class="contact-row-label">Email</span>
+          <span class="contact-row-value">cyoon@iu.edu</span>
+        </div>
+        <div class="contact-row">
+          <span class="contact-row-label">Address</span>
+          <span class="contact-row-value">Dept. of Intelligent Systems Engineering<br>Luddy School of Informatics, Computing, and Engineering<br>Indiana University Bloomington<br>Bloomington, IN 47405</span>
+        </div>
+        <div class="contact-row">
+          <span class="contact-row-label">Web</span>
+          <span class="contact-row-value">ISE @ IU Bloomington</span>
+        </div>
+      </div>
+    </div>
+    <div class="contact-form fade-in" style="transition-delay:0.15s">
+      <div class="form-group">
+        <label>Full Name</label>
+        <input type="text" placeholder="Your name"/>
+      </div>
+      <div class="form-group">
+        <label>Email Address</label>
+        <input type="email" placeholder="you@institution.edu"/>
+      </div>
+      <div class="form-group">
+        <label>I am interested in</label>
+        <select>
+          <option>Lab Technician position</option>
+          <option>Postdoctoral position</option>
+          <option>PhD position</option>
+          <option>Undergraduate research</option>
+          <option>Research collaboration</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Message</label>
+        <textarea placeholder="Tell us about your background and research interests..."></textarea>
+      </div>
+      <button class="form-submit" type="button">Send Message →</button>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-logo">
+      <img src="RPBS-logo.svg" alt="RPBS">
+      <span class="footer-logo-text">RPBS<span>Lab</span></span>
+    </div>
+    <p>© 2026 RPBS Lab, Indiana University Bloomington. All rights reserved.</p>
+    <div class="footer-links">
+      <a href="https://orcid.org/0000-0003-4619-7083" target="_blank" rel="noopener">ORCID</a>
+      <a href="https://scholar.google.com/" target="_blank" rel="noopener">Google Scholar</a>
+      <a href="https://luddy.indiana.edu" target="_blank" rel="noopener">Luddy School</a>
+      <a href="https://www.indiana.edu" target="_blank" rel="noopener">IU Bloomington</a>
+    </div>
+  </footer>
+
+  <script>
+    // Intersection observer for fade-in animations
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+    // Smooth active nav highlighting
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('nav ul a');
+
+    const navObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          navLinks.forEach(link => {
+            link.style.color = link.getAttribute('href') === '#' + entry.target.id
+              ? 'var(--accent)' : '';
+          });
+        }
+      });
+    }, { threshold: 0.4 });
+
+    sections.forEach(section => navObserver.observe(section));
+  </script>
+</body>
+</html>
